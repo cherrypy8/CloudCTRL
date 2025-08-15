@@ -32,11 +32,30 @@ async def impact_mode(weather: dict = Body(...)):
         time_str = now.strftime("%H:%M")
 
         prompt = f"""
-You are an expert climate economist and weather impact analyst...
+You are an expert climate economist and weather impact analyst for India.
+Your job is to provide **two different short-term monetary impact statements**
+based on today's weather:
+1. For an average Indian household.
+2. For an average Indian local business.
+
+Guidelines:
+- Be concise (one sentence each).
+- Quantify in percentage change or Indian Rupees (₹).
+- Impacts must be realistic and directly linked to today's weather.
+- Mention the relevant sector (electricity, agriculture, transportation, etc.).
+- Output exactly two bullet points. No extra commentary.
+
 Today's date: {date_str}
 Current time: {time_str}
-Current weather: {weather}
+Current weather data: {weather}
+
+Example output:
+- Household: Today's heatwave will increase home cooling costs by about 20% (~₹25 extra).
+- Business: Higher temperatures may increase refrigeration costs by ~15% (~₹50 more).
+
+Now give two bullet points for the given weather:
 """
+
         model = genai.GenerativeModel("gemini-2.5-flash")
         response = model.generate_content(prompt)
         impact = getattr(response, "text", None) or getattr(
@@ -44,14 +63,17 @@ Current weather: {weather}
         if not impact:
             return {"error": "No response from Gemini."}
 
-        lines = [line.strip()
+        lines = [line.lstrip("-• ").strip()
                  for line in impact.strip().split("\n") if line.strip()]
+
+        # Ensure exactly 2 distinct responses
         if len(lines) < 2:
-            lines = [impact.strip(), impact.strip()]
+            return {"error": "AI did not return two impacts."}
+
         return {"impact1": lines[0], "impact2": lines[1]}
+
     except Exception as e:
         return {"error": str(e)}
-
 # ---------------- Gemini Chat ----------------
 
 
@@ -160,3 +182,4 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=port)
+

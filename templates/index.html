@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Weather App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#2563eb" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <main class="main-flex">
+      <section class="main-weather">
+        <h1
+          style="
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            font-size: 1.6rem;
+            color: #2563eb;
+            margin-bottom: 1.2rem;
+          "
+        >
+          <i class="fa-solid fa-cloud-sun"></i>CloudCTRL Weather
+        </h1>
+        <form id="weatherForm" autocomplete="off">
+          <div class="input-group">
+            <input
+              type="text"
+              id="city"
+              placeholder="Enter city (e.g. London)"
+              required
+            />
+            <button type="submit" id="getWeatherBtn">
+              <span class="btn-text"
+                ><i class="fa-solid fa-magnifying-glass-location"></i> Get It
+              </span>
+              <span class="loader" id="loader"></span>
+            </button>
+          </div>
+        </form>
+        <div id="result"></div>
+      </section>
+      <aside class="side-tabs">
+        <nav class="tabs">
+          <button class="tab-btn active" data-tab="fullday">
+            <i class="fa-solid fa-clock"></i> Full Day
+          </button>
+          <button class="tab-btn" data-tab="impact">
+            <i class="fa-solid fa-bolt"></i> Impact
+          </button>
+          <button class="tab-btn" data-tab="chat">
+            <i class="fa-solid fa-comments"></i> Chat
+          </button>
+        </nav>
+        <section class="tab-content active" id="tab-fullday">
+          <div class="input-group">
+            <input
+              type="text"
+              id="city-fullday"
+              placeholder="Enter city"
+              required
+            />
+            <button id="getFulldayBtn" type="button">
+              <span class="btn-text"
+                ><i class="fa-solid fa-magnifying-glass-location"></i> Get It
+              </span>
+              <span
+                class="loader"
+                id="loader-fullday"
+                style="visibility: hidden"
+              ></span>
+            </button>
+          </div>
+          <div id="fullday-result" class="fullday-scroll"></div>
+        </section>
+        <section class="tab-content" id="tab-impact"></section>
+        <section class="tab-content" id="tab-chat">
+          <div id="chat-container">
+            <div id="chat-history"></div>
+            <form id="chat-form" autocomplete="off">
+              <input
+                type="text"
+                id="chat-input"
+                placeholder="Ask about the weather..."
+                required
+              />
+              <button type="submit">
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </form>
+          </div>
+        </section>
+      </aside>
+    </main>
+    <script src="/static/script.js"></script>
+  </body>
+</html>
